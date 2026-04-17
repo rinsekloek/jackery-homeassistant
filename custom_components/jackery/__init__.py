@@ -39,7 +39,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
 
     try:
-        # Get the list of devices to set up coordinators for each one
         device_list_response = await hass.async_add_executor_job(api.get_device_list)
         devices = device_list_response.get("data", [])
         if not devices:
@@ -58,28 +57,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         device_name = device.get("deviceName", f"Jackery Device {device_id}")
 
         async def _async_update_data(api_client=api, dev_id=device_id):
-            """Fetch data from API endpoint."""
+            """Fetch data from API endpoints."""
             try:
                 async with async_timeout.timeout(10):
-                    data = await hass.async_add_executor_job(
+                    detail_data = await hass.async_add_executor_job(
                         api_client.get_device_detail, dev_id
                     )
                     stat_data = await hass.async_add_executor_job(
                         api_client.get_device_stat, dev_id
                     )
+
                     properties = detail_data.get("data", {}).get("properties") or {}
                     stats = stat_data.get("data") or {}
 
                     merged = {
-                       **properties,
-                       **stats,
-                       "last_updated": dt_util.now(),
+                        **properties,
+                        **stats,
+                        "last_updated": dt_util.now(),
                     }
                     return merged
             except JackeryAuthenticationError as err:
-                raise UpdateFailed(f"Authentication error: {err}")
+                raise UpdateFailed(f"Authentication error: {err}") from err
             except Exception as err:
-                raise UpdateFailed(f"Error communicating with API: {err}")
+                raise UpdateFailed(f"Error communicating with API: {err}") from err
 
         coordinator = DataUpdateCoordinator(
             hass,
@@ -97,7 +97,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
     return True
 
 
