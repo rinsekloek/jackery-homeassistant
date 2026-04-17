@@ -107,8 +107,7 @@ SENSOR_DESCRIPTIONS: tuple[JackerySensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        # 255 = invalid → filter it
-        value=lambda value: None if value == 255 else value,
+        value=lambda value: value / 10.0,
     ),
     JackerySensorEntityDescription(
         key="maxInvStdPw",
