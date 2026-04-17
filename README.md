@@ -1,6 +1,4 @@
-> I have a full time job and can't respond to issues, but I'm open to contributions! If you submit a reasonable pull request, I will review, respond, test, and merge if it looks good. Thank you for understanding!
-
-> **Known issue:** This integration currently [does not support accounts registered in the EU](https://github.com/theak/jackery-homeassistant/issues/2).
+> This fork has been updated and it tested with the SolarVault 3 Pro Max in Home Assistant 
 
 # Jackery Home Assistant Integration
 
