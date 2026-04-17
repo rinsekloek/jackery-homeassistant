@@ -139,7 +139,7 @@ SENSOR_DESCRIPTIONS: tuple[JackerySensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.TIMESTAMP,
         icon="mdi:clock",
     ),
-    	JackerySensorEntityDescription(
+   	JackerySensorEntityDescription(
 		key="pvEgy",
 		name="Solar Energy Total",
 		native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
