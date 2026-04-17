@@ -36,66 +36,103 @@ class JackerySensorEntityDescription(SensorEntityDescription):
 
 # Sensor descriptions
 # This defines all the sensors we'll create for each device.
+# Sensor descriptions
 SENSOR_DESCRIPTIONS: tuple[JackerySensorEntityDescription, ...] = (
     JackerySensorEntityDescription(
-        key="rb",
-        name="Remaining Battery",
+        key="batSoc",
+        name="Battery State of Charge",
         native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.BATTERY,
         state_class=SensorStateClass.MEASUREMENT,
     ),
     JackerySensorEntityDescription(
-        key="bt",
-        name="Battery Temperature",
+        key="soc",
+        name="Inverter State of Charge",
+        native_unit_of_measurement=PERCENTAGE,
+        device_class=SensorDeviceClass.BATTERY,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="batInPw",
+        name="Battery Charge Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="batOutPw",
+        name="Battery Discharge Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="inOngridPw",
+        name="Grid Import Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="outOngridPw",
+        name="Grid Export Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="pvPw",
+        name="Solar Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="stackInPw",
+        name="Total System Input Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="stackOutPw",
+        name="Total System Output Power",
+        native_unit_of_measurement=UnitOfPower.WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    JackerySensorEntityDescription(
+        key="cellTemp",
+        name="Battery Cell Temperature",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        value=lambda value: value / 10.0,
+        # 255 = invalid → filter it
+        value=lambda value: None if value == 255 else value,
     ),
     JackerySensorEntityDescription(
-        key="op",
-        name="Output Power",
+        key="maxInvStdPw",
+        name="Max Inverter Power",
         native_unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     JackerySensorEntityDescription(
-        key="ip",
-        name="Input Power",
+        key="maxOutPw",
+        name="Max Output Power",
         native_unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     JackerySensorEntityDescription(
-        key="acip",
-        name="AC Input Power",
+        key="maxGridStdPw",
+        name="Max Grid Power",
         native_unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     JackerySensorEntityDescription(
-        key="it",
-        name="Time to Full",
-        native_unit_of_measurement=UnitOfTime.HOURS,
-        device_class=SensorDeviceClass.DURATION,
-        state_class=SensorStateClass.MEASUREMENT,
-        value=lambda value: value / 10.0,
-    ),
-    JackerySensorEntityDescription(
-        key="ot",
-        name="Remaining Output Time",
-        native_unit_of_measurement=UnitOfTime.HOURS,
-        device_class=SensorDeviceClass.DURATION,
-        state_class=SensorStateClass.MEASUREMENT,
-        value=lambda value: value / 10.0,
-    ),
-    JackerySensorEntityDescription(
-        key="acov",
-        name="AC Output Voltage",
-        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
-        device_class=SensorDeviceClass.VOLTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        value=lambda value: value / 10.0,
+        key="wsig",
+        name="WiFi Signal",
+        native_unit_of_measurement="dBm",
+        icon="mdi:wifi",
     ),
     JackerySensorEntityDescription(
         key="last_updated",
@@ -106,34 +143,17 @@ SENSOR_DESCRIPTIONS: tuple[JackerySensorEntityDescription, ...] = (
 )
 
 # Binary sensor descriptions
-# These define all binary (ON/OFF) sensors for each device.
-# Note: Different device models may emit different parameters:
-# - odc: DC Output (for models with single DC toggle for USB + Car)
-# - odcc: DC Car Output (for models with separate DC Car toggle)
-# - odcu: USB Output (for models with separate USB toggle)
 BINARY_SENSOR_DESCRIPTIONS: tuple[BinarySensorEntityDescription, ...] = (
     BinarySensorEntityDescription(
-        key="oac",
-        name="AC Output",
-        device_class=BinarySensorDeviceClass.POWER,
-        icon="mdi:power-plug",
-    ),
-    BinarySensorEntityDescription(
-        key="odc",
-        name="DC Output",
+        key="swEps",
+        name="EPS Enabled",
         device_class=BinarySensorDeviceClass.POWER,
         icon="mdi:power",
     ),
     BinarySensorEntityDescription(
-        key="odcc",
-        name="DC Car Output",
+        key="swEpsState",
+        name="EPS Active",
         device_class=BinarySensorDeviceClass.POWER,
-        icon="mdi:car",
-    ),
-    BinarySensorEntityDescription(
-        key="odcu",
-        name="USB Output",
-        device_class=BinarySensorDeviceClass.POWER,
-        icon="mdi:usb-port",
+        icon="mdi:lightning-bolt",
     ),
 )
