@@ -54,8 +54,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     coordinators = {}
     for device in devices:
-        device_id = device["devId"]
-        device_name = device.get("devName", f"Jackery Device {device_id}")
+        device_id = device["deviceId"]
+        device_name = device.get("deviceName", f"Jackery Device {device_id}")
 
         async def _async_update_data(api_client=api, dev_id=device_id):
             """Fetch data from API endpoint."""
