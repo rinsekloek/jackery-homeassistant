@@ -64,9 +64,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     data = await hass.async_add_executor_job(
                         api_client.get_device_detail, dev_id
                     )
-                    properties = data.get("data", {}).get("properties", {})
-                    properties["last_updated"] = dt_util.now()
-                    return properties
+                    stat_data = await hass.async_add_executor_job(
+                        api_client.get_device_stat, dev_id
+                    )
+                    properties = detail_data.get("data", {}).get("properties") or {}
+                    stats = stat_data.get("data") or {}
+
+                    merged = {
+                       **properties,
+                       **stats,
+                       "last_updated": dt_util.now(),
+                    }
+                    return merged
             except JackeryAuthenticationError as err:
                 raise UpdateFailed(f"Authentication error: {err}")
             except Exception as err:

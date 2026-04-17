@@ -195,3 +195,9 @@ class JackeryAPI:
     def get_device_detail(self, device_id: str) -> dict:
         """Get detailed information for a specified device."""
         return self._get_request("/v1/device/property", params={"deviceId": device_id})
+    
+    def get_device_stat(self, device_id: str) -> dict:
+        """Get statistic counters information for a specified device."""
+        return self._get_request("/v1/device/stat/deviceStatistic", params={"deviceId": device_id})
+
+

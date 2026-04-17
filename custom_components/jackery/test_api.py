@@ -52,6 +52,13 @@ def test_jackery_api(username, password):
             for key, value in properties.items():
                 print(f"  - {key}: {value}")
 
+            device_stat = api.get_device_stat(device_id)
+            data = device_stat.get("data", {})
+            print(f"✅ Device stats retrieved with {len(data)} properties")
+
+            for key, value in data.items():
+                print(f"  - {key}: {value}")
+
         return True
 
     except JackeryAuthenticationError as e:
