@@ -30,7 +30,7 @@ async def async_setup_entry(
 
     entities = []
     for device in devices:
-        device_id = device["devId"]
+        device_id = device["deviceId"]
         if device_id in coordinators:
             coordinator = coordinators[device_id]
             # Create entities for all binary sensor descriptions
@@ -54,7 +54,7 @@ class JackeryBinarySensor(CoordinatorEntity, BinarySensorEntity):
         """Initialize the binary sensor."""
         super().__init__(coordinator)
         self.entity_description = description
-        self._device_id = device_info["devId"]
+        self._device_id = device_info["deviceId"]
 
         # Set a unique ID for this entity
         self._attr_unique_id = f"{self._device_id}_{description.key}"
@@ -63,7 +63,7 @@ class JackeryBinarySensor(CoordinatorEntity, BinarySensorEntity):
         # This groups all sensors under a single device in Home Assistant
         self._attr_device_info = {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": device_info.get("devName", f"Jackery Device {self._device_id}"),
+            "name": device_info.get("deviceName", f"Jackery Device {self._device_id}"),
             "manufacturer": "Jackery",
             "model": device_info.get("productType"),
         }

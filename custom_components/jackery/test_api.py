@@ -35,14 +35,14 @@ def test_jackery_api(username, password):
         print(f"✅ Found {len(devices)} devices")
 
         for device in devices:
-            device_id = device.get("devId")
-            device_name = device.get("devName", "Unknown")
+            device_id = device.get("deviceId")
+            device_name = device.get("deviceName", "Unknown")
             print(f"  - Device: {device_name} (ID: {device_id})")
 
         # Test device detail for first device
         if devices:
             first_device = devices[0]
-            device_id = first_device["devId"]
+            device_id = first_device["deviceId"]
             print(f"Testing device detail for {device_id}...")
 
             device_detail = api.get_device_detail(device_id)

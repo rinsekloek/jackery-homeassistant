@@ -185,7 +185,7 @@ class JackeryAPI:
         """Get the list of devices."""
         _LOGGER.info("Attempting to fetch device list from Jackery API")
         try:
-            result = self._get_request("/v1/device/bind/list")
+            result = self._get_request("/v1/device/system/list")
             _LOGGER.info("Successfully retrieved device list")
             return result
         except Exception as e:
